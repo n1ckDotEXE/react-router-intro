@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import {
+	BrowserRouter as Router,
+	Route,
+	Switch,
+	Link,
+	NavLink,
+} from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { Home } from "./component/Home";
+import { Login } from "./component/Login";
+import { SignUp } from "./component/SignUp";
+export class App extends Component {
+	render() {
+		return (
+			<Router>
+				{/* <Route exact path="/" component={Home} />
+				<Route exact path="/sign-up" component={SignUp} /> */}
+				<nav>
+					<NavLink exact activeStyle={{ color: "red" }} to="/">
+						Home
+					</NavLink>
+					<NavLink activeStyle={{ color: "red" }} to="/sign-up">
+						Sign Up
+					</NavLink>
+					<NavLink activeStyle={{ color: "red" }} to="/login">
+						Login
+					</NavLink>
+				</nav>
+
+				<Switch>
+					<Route path="/sign-up" component={SignUp} />
+					<Route path="/login" component={Login} />
+					<Route path="/" component={Home} />
+				</Switch>
+			</Router>
+		);
+	}
 }
 
 export default App;
