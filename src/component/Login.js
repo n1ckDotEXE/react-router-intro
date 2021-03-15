@@ -2,11 +2,7 @@ import React, { Component } from "react";
 
 export class Login extends Component {
 	render() {
-		return (
-			<div>
-				<Login></Login>
-			</div>
-		);
+		return <div>Login</div>;
 	}
 }
 
