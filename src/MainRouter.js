@@ -15,7 +15,7 @@ const MainRouter = () => {
 				<Route exact path="/sign-up" component={SignUp} /> */}
 				<Navbar />
 				<Switch>
-					<Route path="/SignUp/sign-up" component={SignUp} />
+					<Route path="/sign-up/" component={SignUp} />
 					<Route path="/login" component={Login} />
 
 					<Route path="/" component={Home} />

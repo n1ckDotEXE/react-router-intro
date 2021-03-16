@@ -13,8 +13,9 @@ function Navbar() {
 			<nav className="my-2 my-md-0 me-md-3">
 				<NavLink
 					exact
-					activeStyle={{ color: "red" }}
-					className="p-2 text-dark"
+					// activeStyle={{ color: "red" }}
+					className="p-2"
+					activeClassName="active-style-class"
 					to="/"
 				>
 					Home
