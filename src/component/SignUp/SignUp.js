@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import validator from "validator";
-var validator = require("validator");
-
+import { isStrongPassword } from "validator";
 import "./SignUp.css";
 export class SignUp extends Component {
 	state = {
@@ -11,41 +9,51 @@ export class SignUp extends Component {
 		password: "",
 		confirmPassword: "",
 		isError: false,
-		errorMessage: "",
+		errorObj: {},
 	};
-
 	handleSignup = (event) => {
 		this.setState({
 			[event.target.name]: event.target.value,
 		});
 	};
-
 	handleOnPasswordChange = (event) => {
 		this.setState(
 			{
 				[event.target.name]: event.target.value,
 			},
 			() => {
+				let errorObj = {};
 				if (this.state.password !== this.state.confirmPassword) {
+					errorObj.checkConfirmPassword =
+						"Sorry, Your password does not match!";
+				}
+				if (!isStrongPassword(this.state.password)) {
+					errorObj.checkPasswordStrength =
+						"Password must be 8 characters long + 1 uppercase + 1 lowercase + special characters !@#$%^&*()";
+				}
+				if (Object.keys(errorObj).length > 0) {
 					this.setState({
 						isError: true,
-						errorMessage: "Your password does not match!",
-					});
-				} else {
-					this.setState({
-						isError: false,
-						errorMessage: "",
+						errorObj: errorObj,
 					});
 				}
 			}
 		);
 	};
-
 	handleOnSubmit = (event) => {
 		event.preventDefault();
 		console.log(this.state);
 	};
-
+	showErrorMessageObj = () => {
+		let errorMessageArray = Object.values(this.state.errorObj);
+		return errorMessageArray.map((errorMessage, index) => {
+			return (
+				<div key={index} className="alert alert-danger">
+					{errorMessage}
+				</div>
+			);
+		});
+	};
 	render() {
 		const {
 			firstName,
@@ -58,11 +66,7 @@ export class SignUp extends Component {
 		return (
 			<div className="form-body">
 				<main className="form-signin">
-					{isError && (
-						<div className="alert alert-danger">
-							{this.state.errorMessage}
-						</div>
-					)}
+					{isError && this.showErrorMessageObj()}
 					<form onSubmit={this.handleOnSubmit}>
 						<h1 className="h3 mb-3 fw-normal">Please sign up</h1>
 						{/* <label htmlFor="inputFirstName" className="visually-hidden">
