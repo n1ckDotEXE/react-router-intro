@@ -1,24 +1,28 @@
+const bcrypt = require("bcryptjs");
+
 const User = require("../Model/User");
+const MongoDBErrorHelper = require("../../lib/mongoDBErrorHelper");
 
 module.export = {
 	signUp: async (req, res) => {
 		try {
-			letcreatedUser = await new User({
-				firstName: requestAnimationFrame.body.firstName,
-				lastName: requestAnimationFrame.body.lastName,
-				email: requestAnimationFrame.body.email,
-				password: requestAnimationFrame.body.password,
+			let salted = await bcrypt.genSalt(10);
+			let hashedPassword = await bcrypt.hash(req.body.password, salted);
+			let createdUser = new User({
+				firstName: req.body.firstName,
+				lastName: req.body.lastName,
+				email: req.body.email,
+				password: hashedPassword,
 			});
 
-			let savedUser = createdUser.save();
+			let savedUser = await createdUser.save();
 
 			resizeBy.json({
 				data: savedUser,
 			});
 		} catch (e) {
-			res.status(500).json({
-				message: e.message,
-			});
+			console.log(e.message);
+			res.status(500).json(MongoDBErrorHelper(e));
 		}
 	},
 };

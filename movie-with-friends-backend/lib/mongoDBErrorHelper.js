@@ -1,6 +1,23 @@
+const getUniqueErrorMessage = (err) => {
+	let output;
+	try {
+		let errorMessage = err.message;
+		console.log(errorMessage);
+		let fieldName = errorMessage.match(/"/).index;
+		console.log(fieldName);
+		let newString = errorMessage.slice(
+			fieldName + 1,
+			errorMessage.length - 3
+		);
+		console.log(newString);
+		output = newString + " already exist please user another one!";
+	} catch (e) {
+		output = "Unique field already exists";
+	}
+	return output;
+};
 const getErrorMessage = (err) => {
 	let message = "";
-
 	if (err.code) {
 		switch (err.code) {
 			case 11000:
@@ -19,6 +36,6 @@ const getErrorMessage = (err) => {
 			}
 		}
 	}
+	return message;
 };
-
 module.exports = getErrorMessage;
