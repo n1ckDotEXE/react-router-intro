@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import { isStrongPassword } from "validator";
+import { debounce } from "lodash";
+import axios from "axios";
+import { toast } from "react-toastify";
+
 import "./SignUp.css";
 export class SignUp extends Component {
 	state = {
@@ -11,11 +15,37 @@ export class SignUp extends Component {
 		isError: false,
 		errorObj: {},
 	};
+
+	onChangeDebounce = () => {
+		let errorObj = {};
+		if (this.state.password !== this.state.confirmPassword) {
+			errorObj.checkConfirmPassword =
+				"Sorry, your password does not match";
+
+			if (!isStrongPassword(this.state.password)) {
+				errorObj.checkPasswordStrength =
+					"Password must be 8 characters long + 1 uppercase + 1 lowercase + special characters";
+			}
+			if (Object.keys(errorObj).length > 0) {
+				this.setState({
+					isError: true,
+					errorObj: errorObj,
+				});
+			} else {
+				this.setState({
+					isError: false,
+					errorObj: {},
+				});
+			}
+		}
+	};
+
 	handleSignup = (event) => {
 		this.setState({
 			[event.target.name]: event.target.value,
 		});
 	};
+
 	handleOnPasswordChange = (event) => {
 		this.setState(
 			{
@@ -40,10 +70,12 @@ export class SignUp extends Component {
 			}
 		);
 	};
+
 	handleOnSubmit = (event) => {
 		event.preventDefault();
 		console.log(this.state);
 	};
+
 	showErrorMessageObj = () => {
 		let errorMessageArray = Object.values(this.state.errorObj);
 		return errorMessageArray.map((errorMessage, index) => {
@@ -54,6 +86,32 @@ export class SignUp extends Component {
 			);
 		});
 	};
+
+	handleOnSubmit = async (event) => {
+		event.preventDefault();
+		let { firstName, lastName, email, password } = this.state;
+		try {
+			let result = axios.post("http://localhost:3001/users/sign-up", {
+				firstName,
+				lastName,
+				email,
+				password,
+			});
+			console.log(result);
+		} catch (e) {
+			console.log(e.response);
+			toast.error(e.response.data, {
+				position: "top-center",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
+		}
+	};
+
 	render() {
 		const {
 			firstName,
