@@ -64,7 +64,30 @@ const checkForSymbolMiddleware = (req, res, next) => {
 		next();
 	}
 };
+
+const checkLoginIsEmpty = (req, res, next) => {
+	let errorObj = {};
+
+	const { email, password } = req.body;
+
+	if (checkIfEmpty(email)) {
+		errorObj.email = "Email cannot be empty";
+		checkedEmail = true;
+	}
+
+	if (checkIfEmpty(password)) {
+		errorObj.password = "Password cannot be empty";
+	}
+
+	if (Object.keys(errorObj).length > 0) {
+		res.status(500).json(mongoDBErrorHelper({ message: errorObj }));
+	} else {
+		next();
+	}
+};
+
 module.exports = {
 	checkIfEmptyMiddleware,
 	checkForSymbolMiddleware,
+	checkLoginIsEmpty,
 };

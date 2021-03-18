@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-var { signUp } = require("./controller/userController");
+var { signUp, login } = require("./controller/userController");
 var {
 	checkIfEmptyMiddleware,
 	checkForSymbolMiddleware,
@@ -17,5 +17,7 @@ router.post(
 	checkForSymbolMiddleware,
 	signUp
 );
+
+router.post("/login", checkLoginIsEmpty, login);
 
 module.exports = router;
