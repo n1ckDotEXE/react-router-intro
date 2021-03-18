@@ -1,27 +1,51 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
+import jwtDecode from "jwt-decode";
 export class Login extends Component {
 	state = {
 		email: "",
 		password: "",
 	};
+
 	handleLogin = (event) => {
 		this.setState({
 			[event.target.name]: event.target.value,
 		});
 	};
+
 	handleLoginSubmit = async (event) => {
 		event.preventDefault();
+
 		try {
 			let result = axios.post("http://localhost:3001/users/login", {
 				email: this.state.email,
 				password: this.state.password,
 			});
+
 			console.log(result);
+
+			localStorage.setItem("jwtToken", (await result).data.jwtToken);
+
+			let decodedJWToken = jwtDecode((await result).data.jwtToken);
+
+			// console.log(decodedJWToken);
+			this.props.handleUserLogin(decodedToken);
+
+			this.props.history.push("/movie-home");
 		} catch (e) {
 			console.log(e.response.data);
+			toast.error(e.response.data, {
+				position: "top-center",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				draggable: true,
+				progress: undefined,
+			});
 		}
 	};
+
 	render() {
 		const { email, password } = this.state;
 		return (
