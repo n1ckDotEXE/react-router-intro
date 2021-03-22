@@ -31,8 +31,8 @@ function Navbar(props) {
 					</NavLink>
 					<NavLink
 						className="btn btn-outline-primary"
-						activeStyle={{ color: "yellow" }}
-						to="/logout"
+						to="/login"
+						onClick={props.handleUserLogout}
 					>
 						logout
 					</NavLink>

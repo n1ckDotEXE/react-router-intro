@@ -15,7 +15,10 @@ const MainRouter = (props) => {
 			<Router>
 				{/* <Route exact path="/" component={Home} />
 				<Route exact path="/sign-up" component={SignUp} /> */}
-				<Navbar user={props.user} />
+				<Navbar
+					user={props.user}
+					handleUserLogout={props.handleUserLogout}
+				/>
 				<Switch>
 					<Route path="/movie-home" component={AuthMovieHome} />
 
