@@ -50,7 +50,7 @@ module.exports = {
             email: foundUser.email,
           },
           "mightyhamster",
-          { expiresIn: "1h" }
+          { expiresIn: "1d" }
         );
 
         res.json({
