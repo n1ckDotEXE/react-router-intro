@@ -3,15 +3,21 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 export class AuthMovieHome extends Component {
-  state = {
-    movieInput: "",
-    movieArray: [],
-    isLoading: false,
-    isError: false,
-    errorMessage: "",
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      movieInput: "",
+      movieArray: [],
+      isLoading: false,
+      isError: false,
+      errorMessage: "",
+    };
+  }
 
   async componentDidMount() {
+    // this._mounted = true;
+
     let randomTitle = ["batman", "superman", "lego", "alien", "predator"];
 
     let randomSelectedTitle = Math.floor(Math.random() * randomTitle.length);
@@ -25,7 +31,7 @@ export class AuthMovieHome extends Component {
         `http://omdbapi.com/?apikey=6332b1e1&s=${randomTitle[randomSelectedTitle]}`
       );
 
-      console.log(movieData);
+      //console.log(movieData);
 
       this.setState({
         movieArray: movieData.data.Search,
@@ -61,7 +67,7 @@ export class AuthMovieHome extends Component {
       let movieData = await axios.get(
         `http://omdbapi.com/?apikey=6332b1e1&s=${this.state.movieInput}`
       );
-      console.log(movieData);
+      //console.log(movieData);
       if (movieData.data?.Response === "False") {
         this.setState({
           isLoading: false,
