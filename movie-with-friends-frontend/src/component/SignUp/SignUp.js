@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "./SignUp.css";
 
-import { checkIsUserLoggedIn } from "../PrivateRoute/PrivateRoute";
+import { checkIsUserLoggedIn } from "../lib/helpers";
 
 export class SignUp extends Component {
   constructor(props) {

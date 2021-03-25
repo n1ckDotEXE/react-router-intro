@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+const CancelToken = axios.CancelToken;
+const source = CancelToken.source();
 
 export class AuthMovieHome extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       movieInput: "",
       movieArray: [],
@@ -14,33 +15,37 @@ export class AuthMovieHome extends Component {
       errorMessage: "",
     };
   }
-
   async componentDidMount() {
-    // this._mounted = true;
-
     let randomTitle = ["batman", "superman", "lego", "alien", "predator"];
-
     let randomSelectedTitle = Math.floor(Math.random() * randomTitle.length);
-
     this.setState({
       isLoading: true,
     });
-
     try {
       let movieData = await axios.get(
-        `http://omdbapi.com/?apikey=6332b1e1&s=${randomTitle[randomSelectedTitle]}`
+        `http://omdbapi.com/?apikey=6332b1e1&s=${randomTitle[randomSelectedTitle]}`,
+        {
+          cancelToken: source.token,
+        }
       );
-
       //console.log(movieData);
-
       this.setState({
         movieArray: movieData.data.Search,
         isLoading: false,
         movieInput: "",
       });
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
   }
-
+  componentWillUnmount() {
+    // if (source) {
+    //   source.cancel("Operation canceled by the user.");
+    // }
+    if (this.state.isLoading) {
+      source.cancel("Operation canceled by the user.");
+    }
+  }
   handleMovieInput = (event) => {
     this.setState({
       movieInput: event.target.value,
@@ -48,7 +53,6 @@ export class AuthMovieHome extends Component {
       errorMessage: "",
     });
   };
-
   handleSearchMovieClick = async (event) => {
     if (this.state.movieInput.length === 0) {
       this.setState({
@@ -58,11 +62,9 @@ export class AuthMovieHome extends Component {
       });
       return;
     }
-
     this.setState({
       isLoading: true,
     });
-
     try {
       let movieData = await axios.get(
         `http://omdbapi.com/?apikey=6332b1e1&s=${this.state.movieInput}`
@@ -77,7 +79,6 @@ export class AuthMovieHome extends Component {
         });
         return;
       }
-
       this.setState({
         movieArray: movieData.data.Search,
         isLoading: false,
@@ -85,7 +86,6 @@ export class AuthMovieHome extends Component {
       });
     } catch (e) {}
   };
-
   handleSearchOnEnter = async (event) => {
     if (this.state.movieInput.length === 0) {
       this.setState({
@@ -94,17 +94,14 @@ export class AuthMovieHome extends Component {
       });
       return;
     }
-
     if (event.key === "Enter") {
       this.setState({
         isLoading: true,
       });
-
       try {
         let movieData = await axios.get(
           `http://omdbapi.com/?apikey=6332b1e1&s=${this.state.movieInput}`
         );
-
         if (movieData.data?.Response === "False") {
           this.setState({
             isLoading: false,
@@ -122,7 +119,6 @@ export class AuthMovieHome extends Component {
       } catch (e) {}
     }
   };
-
   showMovieArrayList = () => {
     return this.state.movieArray.map((item) => {
       return (
@@ -152,7 +148,6 @@ export class AuthMovieHome extends Component {
       );
     });
   };
-
   render() {
     return (
       <div style={{ marginTop: 50, textAlign: "center" }}>
@@ -163,7 +158,6 @@ export class AuthMovieHome extends Component {
           onChange={this.handleMovieInput}
           onKeyPress={this.handleSearchOnEnter}
         />
-
         <br />
         <button
           onClick={this.handleSearchMovieClick}
@@ -185,5 +179,4 @@ export class AuthMovieHome extends Component {
     );
   }
 }
-
 export default AuthMovieHome;

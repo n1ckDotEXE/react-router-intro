@@ -10,6 +10,9 @@ var {
   checkForSymbolMiddleware,
   checkLoginIsEmpty,
 } = require("../lib/validator");
+
+var { checkIsUserHaveValidJwtToken } = require("../lib/authChecker");
+
 /* GET users listing. */
 router.get("/", function (req, res, next) {
   res.send("respond with a resource");
@@ -24,6 +27,10 @@ router.post(
 
 router.post("/login", checkLoginIsEmpty, login);
 
-router.put("/update-user-password", updateUserPassword);
+router.put(
+  "/update-user-password",
+  checkIsUserHaveValidJwtToken,
+  updateUserPassword
+);
 
 module.exports = router;

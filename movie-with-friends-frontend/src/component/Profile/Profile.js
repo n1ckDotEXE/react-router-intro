@@ -14,8 +14,9 @@ export class Profile extends Component {
       newPassword: "",
       confirmNewPassword: "",
       errorObj: {},
+      disabledSubmitButton: true,
     };
-
+    this._isMounted = true;
     this.onChangeDebounce = debounce(this.onChangeDebounce, 1000);
   }
 
@@ -38,7 +39,7 @@ export class Profile extends Component {
       );
 
       if (success.data.payload) {
-        // localStorage.removeItem("jwtToken");
+        //localStorage.removeItem("jwtToken");
         this.props.handleUserLogout();
         this.props.history.push("/login");
       }
@@ -68,11 +69,13 @@ export class Profile extends Component {
     // }
 
     if (Object.keys(errorObj).length > 0) {
+      console.log("----");
       this.setState({
         isError: true,
         errorObj: errorObj,
       });
     } else {
+      console.log("78 I am here");
       this.setState({
         isError: false,
         errorObj: {},
@@ -86,9 +89,32 @@ export class Profile extends Component {
         [event.target.name]: event.target.value,
       },
       () => {
-        this.onChangeDebounce();
+        if (this.state.newPassword === this.state.confirmNewPassword) {
+          this.setState({
+            disabledSubmitButton: false,
+          });
+        } else {
+          this.setState({
+            disabledSubmitButton: true,
+          });
+        }
+        // this.onChangeDebounce();
+
+        if (this._isMounted) {
+          this.onChangeDebounce();
+        }
       }
     );
+  };
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  handleOldPasswordChange = (event) => {
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
   };
 
   showErrorMessageObj = () => {
@@ -131,7 +157,7 @@ export class Profile extends Component {
               required
               name="oldPassword"
               value={oldPassword}
-              onChange={this.handleOnPasswordChange}
+              onChange={this.handleOldPasswordChange}
             />
 
             <br />
@@ -167,7 +193,8 @@ export class Profile extends Component {
             <button
               className="w-100 btn btn-lg btn-primary"
               type="submit"
-              disabled={isError ? true : false}
+              //disabled={isError ? true : false}
+              disabled={this.state.disabledSubmitButton}
             >
               Change Password
             </button>

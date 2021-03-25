@@ -17,9 +17,9 @@ function Navbar(props) {
           className="p-2"
           // activeStyle={{ color: "red" }}
           activeClassName="active-class-style"
-          to="/"
+          to={props.user ? "/movie-home" : "/home"}
         >
-          Home
+          {props.user ? "Movie Search " : "Home"}
         </NavLink>
       </nav>
       {props.user ? (
