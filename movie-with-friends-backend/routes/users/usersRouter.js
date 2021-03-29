@@ -4,6 +4,7 @@ var {
   signUp,
   login,
   updateUserPassword,
+  sendSMSTwilio,
 } = require("./controller/userController");
 var {
   checkIfEmptyMiddleware,
@@ -31,6 +32,12 @@ router.put(
   "/update-user-password",
   checkIsUserHaveValidJwtToken,
   updateUserPassword
+);
+
+router.post(
+  "/send-sms-movie-to-friend",
+  checkIsUserHaveValidJwtToken,
+  sendSMSTwilio
 );
 
 module.exports = router;

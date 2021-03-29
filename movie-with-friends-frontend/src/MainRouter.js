@@ -11,6 +11,7 @@ import NotFound from "./component/NotFound/NotFound";
 import PrivateRoute from "./component/PrivateRoute/PrivateRoute";
 import MovieDetail from "./component/AuthMovieHome/MovieDetail";
 import Profile from "./component/Profile/Profile";
+import CreateFriend from "./component/CreateFriend/CreateFriend";
 
 const MainRouter = (props) => {
   return (
@@ -31,6 +32,8 @@ const MainRouter = (props) => {
           component={Profile}
           handleUserLogout={props.handleUserLogout}
         />
+
+        <PrivateRoute exact path="/create-friend" component={CreateFriend} />
 
         <Route exact path="/sign-up" component={SignUp} />
 

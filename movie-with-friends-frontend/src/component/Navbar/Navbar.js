@@ -24,6 +24,15 @@ function Navbar(props) {
       </nav>
       {props.user ? (
         <>
+          `{" "}
+          <NavLink
+            className="btn btn-outline-success"
+            activeStyle={{ color: "yellow" }}
+            to="/create-friend"
+          >
+            Create Friend
+          </NavLink>
+          `
           <NavLink
             className="btn btn-outline-primary"
             activeStyle={{ color: "yellow" }}

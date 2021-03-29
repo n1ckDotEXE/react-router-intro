@@ -43,7 +43,7 @@ export class MovieDetail extends Component {
                   );
                 })}
 
-                <div style={{ marginTop: 140 }}>
+                <div style={{ marginTop: 50 }}>
                   <a
                     className="btn btn-primary"
                     target="_blank"

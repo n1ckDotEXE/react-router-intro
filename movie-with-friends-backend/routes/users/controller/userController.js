@@ -1,6 +1,10 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = require("twilio")(accountSid, authToken);
+
 const User = require("../Model/User");
 const mongoDBErrorHelper = require("../../lib/mongoDBErrorHelper");
 
@@ -49,7 +53,7 @@ module.exports = {
           {
             email: foundUser.email,
           },
-          "mightyhamster",
+          process.env.JWT_VERY_SECRET,
           { expiresIn: "1d" }
         );
 
@@ -64,6 +68,10 @@ module.exports = {
   updateUserPassword: async (req, res) => {
     try {
       let foundUser = await User.findOne({ email: req.body.email });
+
+      if (!foundUser) {
+        throw { message: "User not found!!!!" };
+      }
 
       let comparedPassword = await bcrypt.compare(
         req.body.oldPassword,
@@ -87,6 +95,31 @@ module.exports = {
         message: "success",
         payload: true,
       });
+    } catch (e) {
+      res.status(500).json(mongoDBErrorHelper(e));
+    }
+  },
+  sendSMSTwilio: async (req, res) => {
+    try {
+      let sentSMS = await client.messages.create({
+        body: `Now this is the story all about how
+                My life got flipped, turned upside down
+                And I'd like to take a minute, just sit right there
+                I'll tell you how I became the prince of a town called Bel-Air
+                In West Philadelphia born and raised
+                On the playground is where I spent most of my days
+                Chilling out, maxing, relaxing all cool
+                And all shooting some b-ball outside of the school
+                When a couple of guys, who we're up to no good
+                Started making trouble in my neighbourhood
+                I got in one little fight and my mom got scared
+                And said, you're moving with your aunty and uncle in Bel-Air
+                `,
+        from: "+",
+        to: "+",
+      });
+
+      res.json(sentSMS);
     } catch (e) {
       res.status(500).json(mongoDBErrorHelper(e));
     }
