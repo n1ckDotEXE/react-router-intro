@@ -102,21 +102,10 @@ module.exports = {
   sendSMSTwilio: async (req, res) => {
     try {
       let sentSMS = await client.messages.create({
-        body: `Now this is the story all about how
-                My life got flipped, turned upside down
-                And I'd like to take a minute, just sit right there
-                I'll tell you how I became the prince of a town called Bel-Air
-                In West Philadelphia born and raised
-                On the playground is where I spent most of my days
-                Chilling out, maxing, relaxing all cool
-                And all shooting some b-ball outside of the school
-                When a couple of guys, who we're up to no good
-                Started making trouble in my neighbourhood
-                I got in one little fight and my mom got scared
-                And said, you're moving with your aunty and uncle in Bel-Air
-                `,
-        from: "+",
-        to: "+",
+        body: `Hey ${req.body.targetUser.nickName},I found this cool movie called ${req.body.title} and here's the plot: ${req.body.plot}. Here's the imdb link: https://www.imdb.com/title/${req.body.imdbID}/
+        `,
+        from: "+12018179008",
+        to: "+19176261808", //req.body.targetUser.mobileNumber We are not using the paid version so we can't send text to a real friend
       });
 
       res.json(sentSMS);
